@@ -345,8 +345,8 @@ output_results() {
 v="$(source /etc/os-release; echo ${PRETTY_NAME} | cut -d ' ' -f 3)"
 echo "${3}" | awk -v v="${v}" '
     {
-        print $1 v "/main"
-        print $1 v "/community"
+        print $1 "/" v "/main"
+        print $1 "/" v "/community"
     }
 ' | output_results
 
