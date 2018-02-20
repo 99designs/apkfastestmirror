@@ -49,9 +49,13 @@ mirrors_custom=""
 # At least one published mirror that should generally be reachable
 mirrors_published="
 http://dl-cdn.alpinelinux.org/alpine/
+http://nl.alpinelinux.org/alpine/
+http://uk.alpinelinux.org/alpine/
 http://dl-2.alpinelinux.org/alpine/
+http://dl-3.alpinelinux.org/alpine/
+http://dl-4.alpinelinux.org/alpine/
+http://dl-5.alpinelinux.org/alpine/
 http://dl-8.alpinelinux.org/alpine/
-http://mirror.aarnet.edu.au/pub/alpine
 "
 #
 ### Measurement Variables
@@ -181,13 +185,13 @@ $(
  )
 "
 
-# Fetch mirrorlists from sources
+# Fetch mirrorlists from first published mirror that is alive
 $verbose && echo "Fetching mirror lists"
 mirrorlist="
 ${mirrors_custom}
 $(
     for source in ${mirrorlist_sources}; do \
-        wget -O- -q -Y ${http_use_proxy} -T ${http_timeout} ${source}; \
+        wget -O- -q -Y ${http_use_proxy} -T ${http_timeout} ${source} && break; \
     done \
     | sort \
     | uniq \
@@ -343,9 +347,9 @@ echo "${3}" | awk -v v="${v}" '
     {
         print $1 v "/main"
         print $1 v "/community"
-        print "@edge_main " $1 "edge" "/main"
-        print "@edge_community " $1 "edge" "/community"
-        print "@edge_testing " $1 "edge" "/testing"
+        print "@edge_main " $1 "/edge" "/main"
+        print "@edge_community " $1 "/edge" "/community"
+        print "@edge_testing " $1 "/edge" "/testing"
     }
 ' | output_results
 
